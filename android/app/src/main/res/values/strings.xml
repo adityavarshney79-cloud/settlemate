@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SettleMate</string>
+    <string name="title_activity_main">SettleMate</string>
+    <string name="package_name">com.settlemate.app</string>
+    <string name="custom_url_scheme">com.settlemate.app</string>
+</resources>

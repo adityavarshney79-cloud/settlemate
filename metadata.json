@@ -1,0 +1,6 @@
+{
+  "name": "SettleMate - NZ Home Transition Concierge",
+  "description": "Premium New Zealand home transition concierge connecting Home Buyers with Mortgage Advisers, Property Lawyers, Real Estate Agents, and Super Admins featuring shared paper vaults and real NZ neighborhood photography.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
