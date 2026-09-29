@@ -8,12 +8,12 @@ workflows:
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: io.codemagic.sample.iosnative
+        bundle_identifier: com.settlemate.nz
       vars:
-        BUNDLE_ID: "io.codemagic.sample.iosnative"
+        BUNDLE_ID: com.settlemate.nz
         XCODE_WORKSPACE: "CodemagicSample.xcworkspace" # <-- Put the name of your Xcode workspace here
         XCODE_SCHEME: "CodemagicSample" # <-- Put the name of your Xcode scheme here
-        APP_STORE_APPLE_ID: 1555555551
+        APP_STORE_APPLE_ID: 6817467746
       xcode: latest
       cocoapods: default
     scripts:
@@ -40,8 +40,8 @@ workflows:
     publishing:
       email:
         recipients:
-          - user_1@example.com
-          - user_2@example.com
+          - aditya@uniwidetech.com
+          - precisedcom@gmail.com
         notify:
           success: true
           failure: false
@@ -57,4 +57,4 @@ workflows:
 
         # Configuration related to App Store (optional)
         # Note: This action is performed during post-processing.
-        submit_to_app_store: false
+        submit_to_app_store: true
