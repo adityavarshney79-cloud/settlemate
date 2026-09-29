@@ -15,7 +15,7 @@ workflows:
         XCODE_SCHEME: "CodemagicSample" # <-- Put the name of your Xcode scheme here
         APP_STORE_APPLE_ID: 6817467746
       xcode: latest
-          - name: Set up provisioning profiles settings on Xcode project
+      - name: Set up provisioning profiles settings on Xcode project
         script: xcode-project use-profiles
       - name: Increment build number
         script: | 
