@@ -1,23 +1,62 @@
 workflows:
   ios-release-build:
     name: iOS Release Build
+    max_build_duration: 60
     instance_type: mac_mini_m1
-    
-    # 1. Add the integration section here:
+
+    # 1. Connected API Key integration from Codemagic UI settings
     integrations:
-      app_store_connect: "Your_Key_Name_In_Codemagic" # The name you gave the key in Codemagic Integrations UI
+      app_store_connect: "codemagic ci"
 
     environment:
-      vars:
-        BUNDLE_ID: "com.settlemate.nz"
-      xcode: latest
+      node: latest
       cocoapods: default
+      xcode: latest
+      vars:
+        XCODE_WORKSPACE: "ios/App.xcworkspace"  # Update path if your .xcworkspace is located elsewhere
+        XCODE_SCHEME: "App"                     # Update to match your Xcode target scheme name
+        BUNDLE_ID: "com.settlemate.nz"
 
     scripts:
-      # ... your build scripts ...
+      - name: Install Node.js dependencies
+        script: |
+          npm install
+
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios && pod install
+
+      - name: Initialize keychain
+        script: |
+          keychain initialize
+
+      - name: Fetch signing profiles and certificates
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+
+      - name: Add certificates to keychain
+        script: |
+          keychain add-certificates
+
+      - name: Set up Xcode project code signing
+        script: |
+          xcode-project use-profiles
+
+      - name: Build iOS IPA
+        script: |
+          xcode-project build-ipa \
+            --workspace "$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME" \
+            --config Release
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
 
     publishing:
       app_store_connect:
-        # 2. Keep auth: integration matching the key above
+        # 2. Refers to "codemagic ci" specified in integrations above
         auth: integration
         submit_to_testflight: true
