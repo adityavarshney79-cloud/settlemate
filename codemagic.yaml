@@ -21,7 +21,7 @@ workflows:
         script: |
           npm install
 
-      - name: Sync Capacitor / Native assets (if using Capacitor)
+      - name: Sync Capacitor iOS (if applicable)
         script: |
           npx cap sync ios || true
 
@@ -53,7 +53,6 @@ workflows:
             --workspace "$XCODE_WORKSPACE" \
             --scheme "$XCODE_SCHEME" \
             --config Release
-
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
