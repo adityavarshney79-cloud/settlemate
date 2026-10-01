@@ -4,7 +4,6 @@ workflows:
     max_build_duration: 60
     instance_type: mac_mini_m1
 
-    # 1. Connected API Key integration from Codemagic UI settings
     integrations:
       app_store_connect: "codemagic ci"
 
@@ -13,18 +12,22 @@ workflows:
       cocoapods: default
       xcode: latest
       vars:
-        XCODE_WORKSPACE: "ios/App.xcworkspace"  # Update path if your .xcworkspace is located elsewhere
-        XCODE_SCHEME: "App"                     # Update to match your Xcode target scheme name
+        XCODE_WORKSPACE: "ios/App/App.xcodeproj/App.xcworkspace" # Adjust if inside App.xcodeproj
+        XCODE_SCHEME: "App"
         BUNDLE_ID: "com.settlemate.nz"
 
     scripts:
-      - name: Install Node.js dependencies
+      - name: Install Node dependencies
         script: |
           npm install
 
-      - name: Install CocoaPods dependencies
+      - name: Sync Capacitor / Native assets (if using Capacitor)
         script: |
-          cd ios && pod install
+          npx cap sync ios || true
+
+      - name: Install CocoaPods
+        script: |
+          cd ios/App && pod install
 
       - name: Initialize keychain
         script: |
@@ -57,6 +60,5 @@ workflows:
 
     publishing:
       app_store_connect:
-        # 2. Refers to "codemagic ci" specified in integrations above
         auth: integration
         submit_to_testflight: true
