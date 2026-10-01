@@ -11,20 +11,20 @@ workflows:
       node: latest
       xcode: latest
       vars:
-        XCODE_PROJECT: "ios/App/App.xcodeproj"   # Points to .xcodeproj because SPM is used
+        XCODE_PROJECT: "ios/App/App.xcodeproj"
         XCODE_SCHEME: "App"
         BUNDLE_ID: "com.settlemate.nz"
 
-  scripts:
+    scripts:
       - name: Install Node dependencies
         script: |
           npm install
 
       - name: Build Web Application
         script: |
-          npm run build    # Generates dist / build / www folder for Capacitor
+          npm run build
 
-      - name: Sync Capacitor iOS
+      - name: Sync Capacitor iOS (Generates SPM Dependencies)
         script: |
           npx cap sync ios
 
