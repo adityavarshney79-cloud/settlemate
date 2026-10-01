@@ -9,10 +9,9 @@ workflows:
 
     environment:
       node: latest
-      cocoapods: default
       xcode: latest
       vars:
-        XCODE_WORKSPACE: "ios/App/App.xcodeproj/App.xcworkspace" # Adjust if inside App.xcodeproj
+        XCODE_PROJECT: "ios/App/App.xcodeproj"   # Points to .xcodeproj because SPM is used
         XCODE_SCHEME: "App"
         BUNDLE_ID: "com.settlemate.nz"
 
@@ -21,13 +20,9 @@ workflows:
         script: |
           npm install
 
-      - name: Sync Capacitor iOS (if applicable)
+      - name: Sync Capacitor iOS (Generates SPM Dependencies)
         script: |
-          npx cap sync ios || true
-
-      - name: Install CocoaPods
-        script: |
-          cd ios/App && pod install
+          npx cap sync ios
 
       - name: Initialize keychain
         script: |
@@ -50,9 +45,10 @@ workflows:
       - name: Build iOS IPA
         script: |
           xcode-project build-ipa \
-            --workspace "$XCODE_WORKSPACE" \
+            --project "$XCODE_PROJECT" \
             --scheme "$XCODE_SCHEME" \
             --config Release
+
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
