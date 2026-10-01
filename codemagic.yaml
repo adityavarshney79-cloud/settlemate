@@ -15,12 +15,16 @@ workflows:
         XCODE_SCHEME: "App"
         BUNDLE_ID: "com.settlemate.nz"
 
-    scripts:
+  scripts:
       - name: Install Node dependencies
         script: |
           npm install
 
-      - name: Sync Capacitor iOS (Generates SPM Dependencies)
+      - name: Build Web Application
+        script: |
+          npm run build    # Generates dist / build / www folder for Capacitor
+
+      - name: Sync Capacitor iOS
         script: |
           npx cap sync ios
 
