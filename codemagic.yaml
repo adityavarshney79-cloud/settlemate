@@ -28,8 +28,9 @@ workflows:
         script: |
           npx cap sync ios
 
-      - name: Initialize keychain
+      - name: Clean up temporary signing files and reset keychain
         script: |
+          rm -rf ~/Library/MobileDevice/Provisioning\ Profiles/*
           keychain initialize
 
       - name: Fetch signing profiles and certificates
