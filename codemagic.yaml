@@ -14,9 +14,9 @@ workflows:
         distribution_type: app_store
         bundle_identifier: com.settlemate.nz
         certificates:
-          - Settlemateapp      # Reference Name in Codemagic UI
+          - Settlemateapp
         profiles:
-          - Settlemateapp      # Reference Name in Codemagic UI
+          - Settlemateapp
       vars:
         XCODE_PROJECT: "ios/App/App.xcodeproj"
         XCODE_SCHEME: "App"
