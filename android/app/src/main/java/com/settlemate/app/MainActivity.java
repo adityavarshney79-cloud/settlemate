@@ -1,4 +1,4 @@
-package com.settlemate.app;
+package com.settlemate.nz;
 
 import com.getcapacitor.BridgeActivity;
 

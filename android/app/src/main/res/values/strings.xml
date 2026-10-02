@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">SettleMate</string>
     <string name="title_activity_main">SettleMate</string>
-    <string name="package_name">com.settlemate.app</string>
-    <string name="custom_url_scheme">com.settlemate.app</string>
+    <string name="package_name">com.settlemate.nz</string>
+    <string name="custom_url_scheme">com.settlemate.nz</string>
 </resources>

@@ -13,9 +13,15 @@ import {
   UserCheck,
   ShieldCheck,
   RotateCw,
-  Volume2
+  Volume2,
+  KeyRound,
+  Info,
+  ChevronDown,
+  ChevronUp,
+  CheckCircle2
 } from 'lucide-react';
 import { User, UserRole } from '../types';
+import { DEFAULT_PASSWORDS, ROLE_DEFAULT_PASSWORDS } from '../mockData';
 
 interface LoginProps {
   onLogin: (email: string, password?: string) => { success: boolean; error?: string };
@@ -34,12 +40,13 @@ const generateCaptchaCode = (): string => {
 };
 
 export default function Login({ onLogin, onNavigate, users }: LoginProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('buyer@hometrack.com');
+  const [password, setPassword] = useState('Buyer@Settle2026');
   const [selectedRole, setSelectedRole] = useState<UserRole>('Home Buyer');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [forgotSent, setForgotSent] = useState(false);
+  const [showDemoCredentials, setShowDemoCredentials] = useState(false);
 
   // Captcha states
   const [captchaCode, setCaptchaCode] = useState('');
@@ -66,6 +73,29 @@ export default function Login({ onLogin, onNavigate, users }: LoginProps) {
   };
 
   const handleQuickRoleSelect = (role: UserRole) => {
+    setSelectedRole(role);
+    setError(null);
+    const matchedUser = users.find(u => u.role === role);
+    const fallbackPass = ROLE_DEFAULT_PASSWORDS[role] || 'Buyer@Settle2026';
+    if (matchedUser) {
+      setEmail(matchedUser.email);
+      setPassword(matchedUser.password || DEFAULT_PASSWORDS[matchedUser.email.toLowerCase()] || fallbackPass);
+    } else {
+      const defaultEmailMap: Record<UserRole, string> = {
+        'Super Admin': 'admin@hometrack.com',
+        'Home Buyer': 'buyer@hometrack.com',
+        'Mortgage Adviser': 'mortgage@hometrack.com',
+        'Property Lawyer': 'lawyer@hometrack.com',
+        'Real Estate Agent': 'concierge@hometrack.com'
+      };
+      setEmail(defaultEmailMap[role]);
+      setPassword(fallbackPass);
+    }
+  };
+
+  const handleApplyCredential = (userEmail: string, userPass: string, role: UserRole) => {
+    setEmail(userEmail);
+    setPassword(userPass);
     setSelectedRole(role);
     setError(null);
   };
@@ -377,6 +407,52 @@ export default function Login({ onLogin, onNavigate, users }: LoginProps) {
               <ArrowRight className="w-4 h-4 ml-1.5" />
             </button>
           </form>
+
+          {/* Collapsible Demo Account Credentials Guide */}
+          <div className="pt-2 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => setShowDemoCredentials(!showDemoCredentials)}
+              className="w-full flex items-center justify-between text-xs font-bold text-slate-600 hover:text-slate-900 py-1.5 px-2 rounded-lg hover:bg-slate-50 transition cursor-pointer"
+            >
+              <div className="flex items-center space-x-1.5">
+                <KeyRound className="w-3.5 h-3.5 text-[#de5d26]" />
+                <span>Demo Account Passwords Guide</span>
+              </div>
+              {showDemoCredentials ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            </button>
+
+            {showDemoCredentials && (
+              <div className="mt-2 p-3 bg-slate-50 rounded-xl border border-slate-200 text-[11px] space-y-2 animate-fade-in">
+                <p className="text-slate-500 text-[10px]">
+                  Click any account below to autofill its exact email and password:
+                </p>
+                <div className="space-y-1.5">
+                  {[
+                    { role: 'Super Admin', email: 'admin@hometrack.com', pass: 'Admin@Settle2026' },
+                    { role: 'Home Buyer', email: 'buyer@hometrack.com', pass: 'Buyer@Settle2026' },
+                    { role: 'Mortgage Adviser', email: 'mortgage@hometrack.com', pass: 'Mortgage@Settle2026' },
+                    { role: 'Property Lawyer', email: 'lawyer@hometrack.com', pass: 'Lawyer@Settle2026' },
+                    { role: 'Real Estate Agent', email: 'concierge@hometrack.com', pass: 'Agent@Settle2026' }
+                  ].map((acc) => (
+                    <div 
+                      key={acc.email}
+                      onClick={() => handleApplyCredential(acc.email, acc.pass, acc.role as UserRole)}
+                      className="flex items-center justify-between p-1.5 bg-white rounded-lg border border-slate-200/80 hover:border-[#de5d26] hover:bg-orange-50/50 cursor-pointer transition"
+                    >
+                      <div>
+                        <span className="font-bold text-slate-800">{acc.role}: </span>
+                        <span className="text-slate-600 font-mono">{acc.email}</span>
+                      </div>
+                      <span className="font-mono font-bold text-[#de5d26] text-[10px] bg-orange-50 px-1.5 py-0.5 rounded border border-orange-100">
+                        {acc.pass}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Navigation to Registration & Privacy */}
           <div className="text-center space-y-1.5 pt-1">
