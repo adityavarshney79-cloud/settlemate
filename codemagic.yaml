@@ -18,7 +18,6 @@ workflows:
       vars:
         XCODE_PROJECT: "ios/App/App.xcodeproj"
         XCODE_SCHEME: "App"
-        BUNDLE_ID: "com.settlemate.nz"
 
     scripts:
       - name: Install Node dependencies
@@ -35,9 +34,7 @@ workflows:
 
       - name: Set up code signing settings on Xcode project
         script: |
-          xcode-project use-profiles \
-            --project "$XCODE_PROJECT" \
-            --bundle-identifier "$BUNDLE_ID"
+          xcode-project use-profiles --project "$XCODE_PROJECT"
 
       - name: Build iOS IPA
         script: |
