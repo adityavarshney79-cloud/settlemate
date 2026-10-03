@@ -8,33 +8,30 @@ workflows:
       app_store_connect: "codemagic ci"
 
     environment:
-      node: latest
+      node: 20
       xcode: latest
       ios_signing:
-        certificates:
-          - Settlemateapp
-        provisioning_profiles:
-          - Settlemateapp
+        distribution_type: app_store
+        bundle_identifier: com.settlemate.nz
       vars:
         XCODE_PROJECT: "ios/App/App.xcodeproj"
         XCODE_SCHEME: "App"
 
     scripts:
-      - name: Install Node dependencies
-        script: |
-          npm install
+      - name: Install dependencies
+        script: npm ci
 
       - name: Build Web Application
-        script: |
-          npm run build
+        script: npm run build
 
       - name: Sync Capacitor iOS
-        script: |
-          npx cap sync ios
+        script: npx cap sync ios
 
       - name: Set up code signing settings on Xcode project
         script: |
-          xcode-project use-profiles --project "$XCODE_PROJECT"
+          xcode-project use-profiles \
+            --project "$XCODE_PROJECT" \
+            --warn-only
 
       - name: Build iOS IPA
         script: |
