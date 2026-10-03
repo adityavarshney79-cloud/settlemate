@@ -5,10 +5,10 @@ workflows:
     instance_type: mac_mini_m1
 
     integrations:
-      app_store_connect: "codemagic ci" # Ensure this matches your App Store Connect API integration name in Codemagic
+      app_store_connect: "codemagic ci"
 
     environment:
-      node: 22.x # Fixed: Capacitor CLI requires Node >= 22
+      node: 22 # Changed from 22.x to 22 for Codemagic version manager compatibility
       xcode: latest
       ios_signing:
         distribution_type: app_store
@@ -51,5 +51,3 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
-        beta_groups:
-          - Internal Testers # Optional: Change or remove if you don't have a specific group
