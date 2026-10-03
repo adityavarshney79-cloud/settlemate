@@ -15,7 +15,7 @@ workflows:
         bundle_identifier: com.settlemate.nz
         certificates:
           - Settlemateapp
-        profiles:
+        provisioning_profiles:
           - Settlemateapp
       vars:
         XCODE_PROJECT: "ios/App/App.xcodeproj"
